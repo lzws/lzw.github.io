@@ -405,7 +405,7 @@
                             // 绘制轨迹
                             let polyline = new AMap.Polyline({
                                 map: map,
-                                path: points_list,
+                                path: pointlist,
                                 showDir: true,
                                 // strokeColor: '#269A99', //线颜色
                                 strokeColor: '#19a6f8',
@@ -428,7 +428,7 @@
 
                             // @ts-ignore
                             window.startAnimation = function startAnimation() {
-                                marker.moveAlong(points_list, {
+                                marker.moveAlong(pointlist, {
                                     // 每一段的时长
                                     duration: 200, //可根据实际采集时间间隔设置
                                     // JSAPI2.0 是否延道路自动设置角度在 moveAlong 里设置
