@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!--     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <!--     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
     <title>出租车轨迹回放</title>
     <style>
         /* html,
@@ -34,9 +34,9 @@
             flex-direction: column;
             justify-content: center;
             /* background-color: rgb(255, 255, 255); */
-            
+
             border: 1px solid rgb(40, 95, 233);
-             
+
             border-radius: 5px;
             /* padding-left: 20px; */
         }
@@ -174,7 +174,7 @@
     for (let i = 150103; i <= 150107; i++) {
         const option = document.createElement('option');
         option.value = i;  // 将值设置为数字
-        option.textContent = '2015/1/'+ String(i - 150100);  // 设置显示的文本
+        option.textContent = '2015/1/' + String(i - 150100);  // 设置显示的文本
         selectDay.appendChild(option);  // 将 option 添加到 select 元素中
     }
     for (let i = 1; i <= 71; i++) {
@@ -240,285 +240,210 @@
     //         });
     // });
 
-        selectSlot.addEventListener('change', () => {
-            let slot_value = selectSlot.value;  // 获取选中的值
-            let day_value = selectDay.value;
-            let selectTrip = document.getElementById('trip_num');
-            // console.log(totals)
-            selectTrip.innerHTML = ""
-            let s_option = document.createElement('option');
-            s_option.disabled = true;
-            s_option.selected = true;
-            s_option.textContent = '请选择一个选项';
-            selectTrip.appendChild(s_option)
-            for (let i=1; i<=981; i++){
-                const option = document.createElement('option');
-                option.value = i;  // 将值设置为数字
-                option.textContent = i;  // 设置显示的文本
-                selectTrip.appendChild(option);  // 将 option 添加到 select 元素中
-            }
-            selectTrip.selectedIndex = 0;
-            selectTrip.disabled = false;
-                
+    selectSlot.addEventListener('change', () => {
+        let slot_value = selectSlot.value;  // 获取选中的值
+        let day_value = selectDay.value;
+        let selectTrip = document.getElementById('trip_num');
+        // console.log(totals)
+        selectTrip.innerHTML = ""
+        let s_option = document.createElement('option');
+        s_option.disabled = true;
+        s_option.selected = true;
+        s_option.textContent = '请选择一个选项';
+        selectTrip.appendChild(s_option)
+        for (let i = 1; i <= 981; i++) {
+            const option = document.createElement('option');
+            option.value = i;  // 将值设置为数字
+            option.textContent = i;  // 设置显示的文本
+            selectTrip.appendChild(option);  // 将 option 添加到 select 元素中
+        }
+        selectTrip.selectedIndex = 0;
+        selectTrip.disabled = false;
+
     });
 
-        selectTrip.addEventListener('change', () => {
-            let slot_value = selectSlot.value;  // 获取选中的值
-            let day_value = selectDay.value;
-            let trip_value = selectTrip.value;
-    
-            console.log(day_value, slot_value, trip_value)
+    selectTrip.addEventListener('change', () => {
+        let slot_value = selectSlot.value;  // 获取选中的值
+        let day_value = selectDay.value;
+        let trip_value = selectTrip.value;
 
-            points_list = [[
-        [
-            126.70314175197072,
-            45.732155478391824
+        console.log(day_value, slot_value, trip_value)
+
+        let points_list = [[
+            [
+                126.70314175197072,
+                45.732155478391824
+            ],
+            [
+                126.69773064235238,
+                45.731062121616965
+            ],
+            [
+                126.69430213260128,
+                45.73029337117845
+            ],
+            [
+                126.69108945778356,
+                45.729616451629646
+            ],
+            [
+                126.68531855790867,
+                45.72842502752169
+            ],
+            [
+                126.6821834303542,
+                45.727736131511534
+            ],
+            [
+                126.674894809189,
+                45.727091929779974
+            ],
+            [
+                126.67418844439007,
+                45.72873796225744
+            ],
+            [
+                126.67276317325954,
+                45.731939725470745
+            ],
+            [
+                126.67224823386896,
+                45.73339127228955
+            ],
+            [
+                126.67132853731226,
+                45.732945136306434
+            ],
+            [
+                126.67072028411924,
+                45.732189574388464
+            ],
+            [
+                126.6671222098124,
+                45.73336148887689
+            ],
+            [
+                126.66553847579071,
+                45.73389679715519
+            ],
+            [
+                126.66099307647482,
+                45.73549025267926
+            ],
+            [
+                126.6591365040383,
+                45.73610826284825
+            ]
         ],
         [
-            126.69773064235238,
-            45.731062121616965
-        ],
-        [
-            126.69430213260128,
-            45.73029337117845
-        ],
-        [
-            126.69108945778356,
-            45.729616451629646
-        ],
-        [
-            126.68531855790867,
-            45.72842502752169
-        ],
-        [
-            126.6821834303542,
-            45.727736131511534
-        ],
-        [
-            126.674894809189,
-            45.727091929779974
-        ],
-        [
-            126.67418844439007,
-            45.72873796225744
-        ],
-        [
-            126.67276317325954,
-            45.731939725470745
-        ],
-        [
-            126.67224823386896,
-            45.73339127228955
-        ],
-        [
-            126.67132853731226,
-            45.732945136306434
-        ],
-        [
-            126.67072028411924,
-            45.732189574388464
-        ],
-        [
-            126.6671222098124,
-            45.73336148887689
-        ],
-        [
-            126.66553847579071,
-            45.73389679715519
-        ],
-        [
-            126.66099307647482,
-            45.73549025267926
-        ],
-        [
-            126.6591365040383,
-            45.73610826284825
+            [
+                126.60992907436815,
+                45.75741801332278
+            ],
+            [
+                126.61266102866863,
+                45.756312358940804
+            ],
+            [
+                126.61315289859637,
+                45.75608482386514
+            ],
+            [
+                126.61332904795303,
+                45.75631213753885
+            ],
+            [
+                126.61332904795303,
+                45.75631213753885
+            ],
+            [
+                126.61309811374217,
+                45.756399015626926
+            ],
+            [
+                126.61309811374217,
+                45.756399015626926
+            ],
+            [
+                126.61292437110892,
+                45.756188999955484
+            ],
+            [
+                126.61332904795303,
+                45.75631213753885
+            ],
+            [
+                126.61309811374217,
+                45.756399015626926
+            ]
         ]
-    ],
-       [
-        [
-            126.60992907436815,
-            45.75741801332278
-        ],
-        [
-            126.61266102866863,
-            45.756312358940804
-        ],
-        [
-            126.61315289859637,
-            45.75608482386514
-        ],
-        [
-            126.61332904795303,
-            45.75631213753885
-        ],
-        [
-            126.61332904795303,
-            45.75631213753885
-        ],
-        [
-            126.61309811374217,
-            45.756399015626926
-        ],
-        [
-            126.61309811374217,
-            45.756399015626926
-        ],
-        [
-            126.61292437110892,
-            45.756188999955484
-        ],
-        [
-            126.61332904795303,
-            45.75631213753885
-        ],
-        [
-            126.61309811374217,
-            45.756399015626926
         ]
-    ]                   
-                          ],
 
-                
-            pointlist = points_list[trip_value % 2]
-            AMapLoader.load({
-                    key: "16243e4382933dfb87972a12b5ccfeb6", //申请好的Web端开发者 Key，调用 load 时必填
-                    version: "2.0", //指定要加载的 JS API 的版本，缺省时默认为 1.4.15
-                    plugins: ['AMap.MoveAnimation'],
-                })
-                    .then((AMap) => {
-                        AMap.plugin('AMap.MoveAnimation', function () {
-                            // const map = new AMap.Map("map-container");
-                            let map = new AMap.Map('map-container', {
-                                // viewMode: '3D',
-                                resizeEnable: true,
-                                center: pointlist?.[0],
-                                zoom: 18,
-                                mapStyle: "amap://styles/dark"
-                            });
-                            let marker = new AMap.Marker({
-                                map: map,
-                                position: pointlist?.[0],
 
-                                zoom:18
-                            });
-                            // 绘制轨迹
-                            let polyline = new AMap.Polyline({
-                                map: map,
-                                path: pointlist,
-                                showDir: true,
-                                // strokeColor: '#269A99', //线颜色
-                                strokeColor: '#19a6f8',
-                                // strokeOpacity: 1,     //线透明度
-                                strokeWeight: 4, //线宽
-                                // strokeStyle: "solid"  //线样式
-                            });
+        let pointlist = points_list[trip_value % 2]
+        AMapLoader.load({
+            key: "16243e4382933dfb87972a12b5ccfeb6", //申请好的Web端开发者 Key，调用 load 时必填
+            version: "2.0", //指定要加载的 JS API 的版本，缺省时默认为 1.4.15
+            plugins: ['AMap.MoveAnimation'],
+        })
+            .then((AMap) => {
+                AMap.plugin('AMap.MoveAnimation', function () {
+                    // const map = new AMap.Map("map-container");
+                    let map = new AMap.Map('map-container', {
+                        // viewMode: '3D',
+                        resizeEnable: true,
+                        center: pointlist?.[0],
+                        zoom: 18,
+                        mapStyle: "amap://styles/dark"
+                    });
+                    let marker = new AMap.Marker({
+                        map: map,
+                        position: pointlist?.[0],
 
-                            let passedPolyline = new AMap.Polyline({
-                                map: map,
-                                // strokeColor: '#652F90', //线颜色
-                                strokeColor: '#04293f',
-                                strokeWeight: 4, //线宽
-                            });
+                        zoom: 18
+                    });
+                    // 绘制轨迹
+                    let polyline = new AMap.Polyline({
+                        map: map,
+                        path: pointlist,
+                        showDir: true,
+                        // strokeColor: '#269A99', //线颜色
+                        strokeColor: '#19a6f8',
+                        // strokeOpacity: 1,     //线透明度
+                        strokeWeight: 4, //线宽
+                        // strokeStyle: "solid"  //线样式
+                    });
 
-                            marker.on('moving', function (e) {
-                                passedPolyline.setPath(e.passedPath);
-                                map.setCenter(e.target.getPosition(), true);
-                            });
+                    let passedPolyline = new AMap.Polyline({
+                        map: map,
+                        // strokeColor: '#652F90', //线颜色
+                        strokeColor: '#04293f',
+                        strokeWeight: 4, //线宽
+                    });
 
-                            // @ts-ignore
-                            window.startAnimation = function startAnimation() {
-                                marker.moveAlong(pointlist, {
-                                    // 每一段的时长
-                                    duration: 200, //可根据实际采集时间间隔设置
-                                    // JSAPI2.0 是否延道路自动设置角度在 moveAlong 里设置
-                                    autoRotation: false,
-                                });
-                            };
-                            map.setFitView();
+                    marker.on('moving', function (e) {
+                        passedPolyline.setPath(e.passedPath);
+                        map.setCenter(e.target.getPosition(), true);
+                    });
+
+                    // @ts-ignore
+                    window.startAnimation = function startAnimation() {
+                        marker.moveAlong(pointlist, {
+                            // 每一段的时长
+                            duration: 200, //可根据实际采集时间间隔设置
+                            // JSAPI2.0 是否延道路自动设置角度在 moveAlong 里设置
+                            autoRotation: false,
                         });
-                    })
-
-       
+                    };
+                    map.setFitView();
+                });
             })
 
 
-    // selectTrip.addEventListener('change', () => {
-    //     let slot_value = selectSlot.value;  // 获取选中的值
-    //     let day_value = selectDay.value;
-    //     let trip_value = selectTrip.value;
-
-    //     console.log(day_value, slot_value, trip_value)
-
-    //     fetch(api_dir + 'get_one_trip/' + day_value + '/' + slot_value + '/' + trip_value)
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             var points_list = data.points_list;
-    //             AMapLoader.load({
-    //                 key: "16243e4382933dfb87972a12b5ccfeb6", //申请好的Web端开发者 Key，调用 load 时必填
-    //                 version: "2.0", //指定要加载的 JS API 的版本，缺省时默认为 1.4.15
-    //                 plugins: ['AMap.MoveAnimation'],
-    //             })
-    //                 .then((AMap) => {
-    //                     AMap.plugin('AMap.MoveAnimation', function () {
-    //                         // const map = new AMap.Map("map-container");
-    //                         let map = new AMap.Map('map-container', {
-    //                             // viewMode: '3D',
-    //                             resizeEnable: true,
-    //                             center: points_list?.[0],
-    //                             zoom: 18,
-    //                             mapStyle: "amap://styles/dark"
-    //                         });
-    //                         let marker = new AMap.Marker({
-    //                             map: map,
-    //                             position: points_list?.[0],
-
-    //                             zoom:18
-    //                         });
-    //                         // 绘制轨迹
-    //                         let polyline = new AMap.Polyline({
-    //                             map: map,
-    //                             path: points_list,
-    //                             showDir: true,
-    //                             // strokeColor: '#269A99', //线颜色
-    //                             strokeColor: '#19a6f8',
-    //                             // strokeOpacity: 1,     //线透明度
-    //                             strokeWeight: 4, //线宽
-    //                             // strokeStyle: "solid"  //线样式
-    //                         });
-
-    //                         let passedPolyline = new AMap.Polyline({
-    //                             map: map,
-    //                             // strokeColor: '#652F90', //线颜色
-    //                             strokeColor: '#04293f',
-    //                             strokeWeight: 4, //线宽
-    //                         });
-
-    //                         marker.on('moving', function (e) {
-    //                             passedPolyline.setPath(e.passedPath);
-    //                             map.setCenter(e.target.getPosition(), true);
-    //                         });
-
-    //                         // @ts-ignore
-    //                         window.startAnimation = function startAnimation() {
-    //                             marker.moveAlong(points_list, {
-    //                                 // 每一段的时长
-    //                                 duration: 200, //可根据实际采集时间间隔设置
-    //                                 // JSAPI2.0 是否延道路自动设置角度在 moveAlong 里设置
-    //                                 autoRotation: false,
-    //                             });
-    //                         };
-    //                         map.setFitView();
-    //                     });
-    //                 })
-    //                 .catch((e) => {
-    //                     console.error(e); //加载错误提示
-    //                 });
+    })
 
 
-    //         })
 
-    // })
 
 </script>
 
