@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>出租车轨迹回放</title>
+    <style>
+        /* html,
+        body, */
+        #map-container {
+            width: 100%;
+            height: 100%;
+            /* margin: 0 auto; */
+            /* margin: auto 0; */
+        }
+
+
+
+        .main-box {
+            width: 100%;
+            height: 100%;
+            background-color: rgb(7, 4, 21);
+            padding: 15px;
+            /* background-color: #04293f; */
+        }
+
+        .form-box {
+            width: 97%;
+            height: 50px;
+            padding-top: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            /* background-color: rgb(255, 255, 255); */
+            
+            border: 1px solid rgb(40, 95, 233);
+             
+            border-radius: 5px;
+            /* padding-left: 20px; */
+        }
+
+        .select-box {
+            display: flex;
+            /* background-color: blue; */
+            /* margin: 10px; */
+            width: 100%;
+            /* height: 50px; */
+            color: rgb(255, 255, 255);
+            /* font-family: "宋体"; */
+
+        }
+
+        .select-item {
+            padding-right: 10px;
+            /* font-family: "宋体"; */
+            margin-left: 20px;
+        }
+
+        select {
+            border: 1px solid #ced4da;
+            color: rgb(255, 255, 255);
+            background-color: rgb(32, 30, 45);
+            font-family: sans-serif;
+            width: 100px;
+            height: 25px;
+        }
+
+        .trip-box1 {
+            width: 97%;
+            height: 750px;
+            margin-top: 10px;
+            text-align: center;
+            /* background-color: rgb(255, 255, 255); */
+            border: 1px solid rgb(40, 95, 233);
+            display: flex;
+            justify-content: center;
+            border-radius: 5px;
+        }
+
+        .trip-box {
+            width: 95%;
+            height: 650px;
+
+        }
+
+        .title-box {
+            width: 100%;
+            /* background-color: aqua; */
+            color: rgb(255, 255, 255);
+            display: flex;
+            flex-direction: row;
+            flex-direction: space-between;
+        }
+
+        .replay-button {
+            margin: auto 0;
+            margin-left: auto;
+            height: 35px;
+            background-color: rgb(26, 125, 255);
+            border: 2px solid rgb(26, 125, 255);
+            color: white;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            /* float: right; */
+        }
+
+        .replay-button:hover {
+            background-color: rgb(15, 62, 122);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-box">
+        <div class="form-box">
+            <div class="select-box">
+                <div class="select-item">
+                    <label for="days">日期:</label>
+                    <select id="days">
+                        <option value="" disabled selected>请选择一个选项</option>
+
+                    </select>
+                </div>
+                <div class="select-item">
+                    <label for="slots">时间slot:</label>
+                    <select id="slots" disabled>
+                        <option value="" disabled selected>请选择一个选项</option>
+                    </select>
+                </div>
+                <div class="select-item">
+                    <label for="trip_num">行程号:</label>
+                    <select id="trip_num" disabled>
+                        <option value="" disabled selected>请选择一个选项</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="trip-box1">
+            <div class="trip-box">
+                <div class="title-box">
+                    <h2>出租车轨迹回放</h2>
+                    <button class="replay-button" onclick="window.startAnimation()">播放动画</button>
+                </div>
+
+                <div id="map-container" class="map-container"></div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+
+<script src="https://webapi.amap.com/loader.js"></script>
+<script type="text/javascript">
+    window._AMapSecurityConfig = {
+        securityJsCode: "f2e259a6821634b959dd712c767d3eb2",
+    };
+</script>
+
+<script type="text/javascript">
+    const selectDay = document.getElementById('days');
+    const selectSlot = document.getElementById('slots');
+    const selectTrip = document.getElementById('trip_num')
+    const api_dir = 'http://fr2v3k.natappfree.cc/'
+
+    for (let i = 150103; i <= 150107; i++) {
+        const option = document.createElement('option');
+        option.value = i;  // 将值设置为数字
+        option.textContent = '2015/1/'+ String(i - 150100);  // 设置显示的文本
+        selectDay.appendChild(option);  // 将 option 添加到 select 元素中
+    }
+    for (let i = 1; i <= 71; i++) {
+        const option = document.createElement('option');
+        option.value = i;  // 将值设置为数字
+        option.textContent = i;  // 设置显示的文本
+        selectSlot.appendChild(option);  // 将 option 添加到 select 元素中
+    }
+
+    selectDay.addEventListener('change', () => {
+        selectSlot.selectedIndex = 0;
+        selectSlot.disabled = false
+        selectTrip.selectedIndex = 0
+    })
+
+    AMapLoader.load({
+        key: "16243e4382933dfb87972a12b5ccfeb6", //申请好的Web端开发者key，调用 load 时必填
+        version: "2.0", //指定要加载的 JS API 的版本，缺省时默认为 1.4.15
+    })
+        .then((AMap) => {
+            //JS API 加载完成后获取AMap对象
+            const original_map = new AMap.Map("map-container", {
+                // viewMode: '2D', //默认使用 2D 模式
+                // resizeEnable: true,
+                zoom: 11, //地图级别
+                center: [126.446314, 45.765203], //地图中心点
+                mapStyle: "amap://styles/dark"
+            });
+        })
+        .catch((e) => {
+            console.error(e); //加载错误提示
+        });
+
+    // 添加有个slot下拉框点击事件
+    selectSlot.addEventListener('change', () => {
+        let slot_value = selectSlot.value;  // 获取选中的值
+        let day_value = selectDay.value;
+        let selectTrip = document.getElementById('trip_num');
+        // console.log(totals)
+        selectTrip.innerHTML = ""
+        let s_option = document.createElement('option');
+        s_option.disabled = true;
+        s_option.selected = true;
+        s_option.textContent = '请选择一个选项';
+        selectTrip.appendChild(s_option)
+
+        fetch(api_dir + 'get_totals/' + day_value + '/' + slot_value)
+            .then(response => response.json())
+            .then(data => {
+                // document.getElementById('api-data').innerText = data.message;
+                totals = data.trip_totals
+                for (let i = 1; i <= totals; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;  // 将值设置为数字
+                    option.textContent = i;  // 设置显示的文本
+                    selectTrip.appendChild(option);  // 将 option 添加到 select 元素中
+                }
+                selectTrip.selectedIndex = 0;
+                selectTrip.disabled = false;
+            })
+            .catch(error => {
+                console.error('Error fetching the API:', error);
+            });
+    });
+
+    selectTrip.addEventListener('change', () => {
+        let slot_value = selectSlot.value;  // 获取选中的值
+        let day_value = selectDay.value;
+        let trip_value = selectTrip.value;
+
+        console.log(day_value, slot_value, trip_value)
+
+        fetch(api_dir + 'get_one_trip/' + day_value + '/' + slot_value + '/' + trip_value)
+            .then(response => response.json())
+            .then(data => {
+                var points_list = data.points_list;
+                AMapLoader.load({
+                    key: "16243e4382933dfb87972a12b5ccfeb6", //申请好的Web端开发者 Key，调用 load 时必填
+                    version: "2.0", //指定要加载的 JS API 的版本，缺省时默认为 1.4.15
+                    plugins: ['AMap.MoveAnimation'],
+                })
+                    .then((AMap) => {
+                        AMap.plugin('AMap.MoveAnimation', function () {
+                            // const map = new AMap.Map("map-container");
+                            let map = new AMap.Map('map-container', {
+                                // viewMode: '3D',
+                                resizeEnable: true,
+                                center: points_list?.[0],
+                                zoom: 18,
+                                mapStyle: "amap://styles/dark"
+                            });
+                            let marker = new AMap.Marker({
+                                map: map,
+                                position: points_list?.[0],
+                                // icon: 'https://shiheng-public.oss-cn-shanghai.aliyuncs.com/manuals/ecnu/taxi.png',
+                                // icon: new AMap.Icon({
+                                //     // size: new AMap.Size(50, 50), // 设置图标大小
+                                //     image: 'https://shiheng-public.oss-cn-shanghai.aliyuncs.com/manuals/ecnu/taxi.png',
+                                //     // imageSize: new AMap.Size(50, 50)
+                                // }),
+                                // offset: new AMap.Pixel(-26, -26),
+                                zoom:18
+                            });
+                            // 绘制轨迹
+                            let polyline = new AMap.Polyline({
+                                map: map,
+                                path: points_list,
+                                showDir: true,
+                                // strokeColor: '#269A99', //线颜色
+                                strokeColor: '#19a6f8',
+                                // strokeOpacity: 1,     //线透明度
+                                strokeWeight: 4, //线宽
+                                // strokeStyle: "solid"  //线样式
+                            });
+
+                            let passedPolyline = new AMap.Polyline({
+                                map: map,
+                                // strokeColor: '#652F90', //线颜色
+                                strokeColor: '#04293f',
+                                strokeWeight: 4, //线宽
+                            });
+
+                            marker.on('moving', function (e) {
+                                passedPolyline.setPath(e.passedPath);
+                                map.setCenter(e.target.getPosition(), true);
+                            });
+
+                            // @ts-ignore
+                            window.startAnimation = function startAnimation() {
+                                marker.moveAlong(points_list, {
+                                    // 每一段的时长
+                                    duration: 200, //可根据实际采集时间间隔设置
+                                    // JSAPI2.0 是否延道路自动设置角度在 moveAlong 里设置
+                                    autoRotation: false,
+                                });
+                            };
+                            map.setFitView();
+                        });
+                    })
+                    .catch((e) => {
+                        console.error(e); //加载错误提示
+                    });
+
+
+            })
+
+    })
+
+</script>
+
+
+</html>
