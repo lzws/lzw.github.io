@@ -209,49 +209,142 @@
         });
 
     // 添加有个slot下拉框点击事件
-    selectSlot.addEventListener('change', () => {
-        let slot_value = selectSlot.value;  // 获取选中的值
-        let day_value = selectDay.value;
-        let selectTrip = document.getElementById('trip_num');
-        // console.log(totals)
-        selectTrip.innerHTML = ""
-        let s_option = document.createElement('option');
-        s_option.disabled = true;
-        s_option.selected = true;
-        s_option.textContent = '请选择一个选项';
-        selectTrip.appendChild(s_option)
+    // selectSlot.addEventListener('change', () => {
+    //     let slot_value = selectSlot.value;  // 获取选中的值
+    //     let day_value = selectDay.value;
+    //     let selectTrip = document.getElementById('trip_num');
+    //     // console.log(totals)
+    //     selectTrip.innerHTML = ""
+    //     let s_option = document.createElement('option');
+    //     s_option.disabled = true;
+    //     s_option.selected = true;
+    //     s_option.textContent = '请选择一个选项';
+    //     selectTrip.appendChild(s_option)
 
-        fetch(api_dir + 'get_totals/' + day_value + '/' + slot_value)
-            .then(response => response.json())
-            .then(data => {
-                // document.getElementById('api-data').innerText = data.message;
-                totals = data.trip_totals
-                for (let i = 1; i <= totals; i++) {
-                    const option = document.createElement('option');
-                    option.value = i;  // 将值设置为数字
-                    option.textContent = i;  // 设置显示的文本
-                    selectTrip.appendChild(option);  // 将 option 添加到 select 元素中
-                }
-                selectTrip.selectedIndex = 0;
-                selectTrip.disabled = false;
-            })
-            .catch(error => {
-                console.error('Error fetching the API:', error);
-            });
+    //     fetch(api_dir + 'get_totals/' + day_value + '/' + slot_value)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             // document.getElementById('api-data').innerText = data.message;
+    //             totals = data.trip_totals
+    //             for (let i = 1; i <= totals; i++) {
+    //                 const option = document.createElement('option');
+    //                 option.value = i;  // 将值设置为数字
+    //                 option.textContent = i;  // 设置显示的文本
+    //                 selectTrip.appendChild(option);  // 将 option 添加到 select 元素中
+    //             }
+    //             selectTrip.selectedIndex = 0;
+    //             selectTrip.disabled = false;
+    //         })
+    //         .catch(error => {
+    //             console.error('Error fetching the API:', error);
+    //         });
+    // });
+
+        selectSlot.addEventListener('change', () => {
+            let slot_value = selectSlot.value;  // 获取选中的值
+            let day_value = selectDay.value;
+            let selectTrip = document.getElementById('trip_num');
+            // console.log(totals)
+            selectTrip.innerHTML = ""
+            let s_option = document.createElement('option');
+            s_option.disabled = true;
+            s_option.selected = true;
+            s_option.textContent = '请选择一个选项';
+            selectTrip.appendChild(s_option)
+            for (let i=1; i<=981; i++){
+                const option = document.createElement('option');
+                option.value = i;  // 将值设置为数字
+                option.textContent = i;  // 设置显示的文本
+                selectTrip.appendChild(option);  // 将 option 添加到 select 元素中
+            }
+            selectTrip.selectedIndex = 0;
+            selectTrip.disabled = false;
+                
     });
 
-    selectTrip.addEventListener('change', () => {
-        let slot_value = selectSlot.value;  // 获取选中的值
-        let day_value = selectDay.value;
-        let trip_value = selectTrip.value;
+        selectTrip.addEventListener('change', () => {
+            let slot_value = selectSlot.value;  // 获取选中的值
+            let day_value = selectDay.value;
+            let trip_value = selectTrip.value;
+    
+            console.log(day_value, slot_value, trip_value)
 
-        console.log(day_value, slot_value, trip_value)
+            points_list = [
+        [
+            126.68731283739642,
+            45.728888280248874
+        ],
+        [
+            126.6869754630051,
+            45.72881716233632
+        ],
+        [
+            126.6869754630051,
+            45.72881716233632
+        ],
+        [
+            126.6855516345285,
+            45.72847715622706
+        ],
+        [
+            126.68531855790867,
+            45.72842502752169
+        ],
+        [
+            126.68807577216364,
+            45.729884662479506
+        ],
+        [
+            126.6873691368509,
+            45.729748268147304
+        ],
+        [
+            126.68656150365294,
+            45.72958168710173
+        ],
+        [
+            126.68648247321127,
+            45.72955394483908
+        ],
+        [
+            126.6863920044678,
+            45.72949188962455
+        ],
+        [
+            126.6849930486918,
+            45.7291971142752
+        ],
+        [
+            126.68841250641347,
+            45.72911998848761
+        ],
+        [
+            126.68731283739642,
+            45.728888280248874
+        ],
+        [
+            126.68731283739642,
+            45.728888280248874
+        ],
+        [
+            126.68746250633596,
+            45.7285295529509
+        ],
+        [
+            126.6854278245255,
+            45.7281357079097
+        ],
+        [
+            126.68568035649909,
+            45.728186473680566
+        ],
+        [
+            126.68714639413749,
+            45.72846507378078
+        ]
+    ],
 
-        fetch(api_dir + 'get_one_trip/' + day_value + '/' + slot_value + '/' + trip_value)
-            .then(response => response.json())
-            .then(data => {
-                var points_list = data.points_list;
-                AMapLoader.load({
+            AMapLoader.load({
                     key: "16243e4382933dfb87972a12b5ccfeb6", //申请好的Web端开发者 Key，调用 load 时必填
                     version: "2.0", //指定要加载的 JS API 的版本，缺省时默认为 1.4.15
                     plugins: ['AMap.MoveAnimation'],
@@ -269,13 +362,7 @@
                             let marker = new AMap.Marker({
                                 map: map,
                                 position: points_list?.[0],
-                                // icon: 'https://shiheng-public.oss-cn-shanghai.aliyuncs.com/manuals/ecnu/taxi.png',
-                                // icon: new AMap.Icon({
-                                //     // size: new AMap.Size(50, 50), // 设置图标大小
-                                //     image: 'https://shiheng-public.oss-cn-shanghai.aliyuncs.com/manuals/ecnu/taxi.png',
-                                //     // imageSize: new AMap.Size(50, 50)
-                                // }),
-                                // offset: new AMap.Pixel(-26, -26),
+
                                 zoom:18
                             });
                             // 绘制轨迹
@@ -314,14 +401,87 @@
                             map.setFitView();
                         });
                     })
-                    .catch((e) => {
-                        console.error(e); //加载错误提示
-                    });
 
-
+       
             })
 
-    })
+
+    // selectTrip.addEventListener('change', () => {
+    //     let slot_value = selectSlot.value;  // 获取选中的值
+    //     let day_value = selectDay.value;
+    //     let trip_value = selectTrip.value;
+
+    //     console.log(day_value, slot_value, trip_value)
+
+    //     fetch(api_dir + 'get_one_trip/' + day_value + '/' + slot_value + '/' + trip_value)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             var points_list = data.points_list;
+    //             AMapLoader.load({
+    //                 key: "16243e4382933dfb87972a12b5ccfeb6", //申请好的Web端开发者 Key，调用 load 时必填
+    //                 version: "2.0", //指定要加载的 JS API 的版本，缺省时默认为 1.4.15
+    //                 plugins: ['AMap.MoveAnimation'],
+    //             })
+    //                 .then((AMap) => {
+    //                     AMap.plugin('AMap.MoveAnimation', function () {
+    //                         // const map = new AMap.Map("map-container");
+    //                         let map = new AMap.Map('map-container', {
+    //                             // viewMode: '3D',
+    //                             resizeEnable: true,
+    //                             center: points_list?.[0],
+    //                             zoom: 18,
+    //                             mapStyle: "amap://styles/dark"
+    //                         });
+    //                         let marker = new AMap.Marker({
+    //                             map: map,
+    //                             position: points_list?.[0],
+
+    //                             zoom:18
+    //                         });
+    //                         // 绘制轨迹
+    //                         let polyline = new AMap.Polyline({
+    //                             map: map,
+    //                             path: points_list,
+    //                             showDir: true,
+    //                             // strokeColor: '#269A99', //线颜色
+    //                             strokeColor: '#19a6f8',
+    //                             // strokeOpacity: 1,     //线透明度
+    //                             strokeWeight: 4, //线宽
+    //                             // strokeStyle: "solid"  //线样式
+    //                         });
+
+    //                         let passedPolyline = new AMap.Polyline({
+    //                             map: map,
+    //                             // strokeColor: '#652F90', //线颜色
+    //                             strokeColor: '#04293f',
+    //                             strokeWeight: 4, //线宽
+    //                         });
+
+    //                         marker.on('moving', function (e) {
+    //                             passedPolyline.setPath(e.passedPath);
+    //                             map.setCenter(e.target.getPosition(), true);
+    //                         });
+
+    //                         // @ts-ignore
+    //                         window.startAnimation = function startAnimation() {
+    //                             marker.moveAlong(points_list, {
+    //                                 // 每一段的时长
+    //                                 duration: 200, //可根据实际采集时间间隔设置
+    //                                 // JSAPI2.0 是否延道路自动设置角度在 moveAlong 里设置
+    //                                 autoRotation: false,
+    //                             });
+    //                         };
+    //                         map.setFitView();
+    //                     });
+    //                 })
+    //                 .catch((e) => {
+    //                     console.error(e); //加载错误提示
+    //                 });
+
+
+    //         })
+
+    // })
 
 </script>
 
